@@ -1,0 +1,36 @@
+# -*- mode: conf-toml; -*-
+[tool.black]
+line-length = 79
+target-version = ["py37"]
+include = '\.pyi?$'
+exclude = '''
+/(
+    \.eggs
+  | \.git
+  | \.hg
+  | \.mypy_cache
+  | \.tox
+  | \.venv
+  | _build
+  | buck-out
+  | build
+  | dist
+)/
+'''
+
+[tool.poetry]
+name = "declargparse"
+version = "0.1.0"
+description = "Package for declarative use of the Python argparse module."
+authors = ["Alan Parker Lue <83985+aparkerlue@users.noreply.github.com>"]
+
+[tool.poetry.dependencies]
+python = "^3.7"
+
+[tool.poetry.dev-dependencies]
+mypy = "^0.942"
+pytest = "^7.1.1"
+
+[build-system]
+requires = ["poetry-core>=1.0.0"]
+build-backend = "poetry.core.masonry.api"

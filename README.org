@@ -1,0 +1,74 @@
+# -*- mode: org; -*-
+#+TITLE: declargparse
+
+Package for declarative use of the Python argparse module.
+
+** Usage
+
+Use the declargparse module to specify CLI application arguments
+declaratively.  For example, suppose you have a file called
+sampleapp.py:
+#+begin_src python
+import sys
+
+from declargparse import ArgSpec, CliSpec, SubcmdGroup, SubcmdSpec
+
+
+def a(x) -> int:
+    print("a")
+    return 0
+
+
+def b(x) -> int:
+    print("b")
+    return 0
+
+
+clispec = CliSpec(
+    parserspec=dict(description="Sample CLI application."),
+    argspecs=[
+        ArgSpec(
+            "--xyz",
+            required=True,
+            help="value of xyz argument",
+        ),
+    ],
+    subcmdgroup=SubcmdGroup(
+        description="Subcommands organize functionality.",
+        required=True,
+        subcmdspecs=[
+            SubcmdSpec("pqr", subcmdfn=a, help="a subcommand"),
+            SubcmdSpec("stu", subcmdfn=b, help="another subcommand"),
+        ],
+    ),
+    envvar_prefix="SAMPLEAPP",
+)
+
+
+def main() -> int:
+    args = clispec.parseargs()
+    return args._subcmd(args)
+
+
+if __name__ == "__main__":
+    sys.exit(main())
+#+end_src
+
+declargparse passes your CLI specificaton to [[https://docs.python.org/3/library/argparse.html][argparse]] and produces a
+parser with the following help message:
+#+begin_example
+usage: sampleapp.py [-h] [--xyz XYZ] {pqr,stu} ...
+
+Sample CLI application.
+
+options:
+  -h, --help  show this help message and exit
+  --xyz XYZ   value of xyz argument (required, environment variable: SAMPLEAPP_XYZ)
+
+subcommands:
+  Subcommands organize functionality.
+
+  {pqr,stu}
+    pqr       a subcommand
+    stu       another subcommand
+#+end_example

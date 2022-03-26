@@ -1,0 +1,5 @@
+# -*- mode: conf; -*-
+[flake8]
+max-line-length = 79
+select = B,E,F,W,B9,C90
+ignore = E203,E501,W503
